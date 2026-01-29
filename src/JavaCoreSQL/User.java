@@ -9,28 +9,24 @@ public class User {
     private String address;
 
     public User(String name, int age, String workplace, String address) {
-        if (name == null) {
-            throw new NullPointerException("Нельзя использовать пустое имя");
-        } else {
-            this.name = name;
-        }
+        this.name = checkNotNull(name, "Нельзя ввести пустое имя");
+        this.age = checkPositive(age, "Возраст не должен быть меньше нуля");
+        this.workplace = checkNotNull(workplace, "Нельзя использовать пустое место работы");
+        this.address = checkNotNull(address, "Нельзя использовать пустой адрес");
+    }
 
-        if (age <= 0) {
-            throw new IllegalArgumentException("Возраст должен быть больше 0");
-        } else {
-            this.age = age;
+    private String checkNotNull(String value, String message) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(message);
         }
+        return value;
+    }
 
-        if (workplace == null) {
-            throw new NullPointerException("Нельзя использовать пустое место работы");
-        } else {
-            this.workplace = workplace;
+    private int checkPositive(int value, String message) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(message);
         }
-        if (address == null) {
-            throw new NullPointerException("Нельзя использовать пустой адрес");
-        } else {
-            this.address = address;
-        }
+        return value;
     }
 
     public int getAge() {

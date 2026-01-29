@@ -11,25 +11,30 @@ public class User {
     public static final Set<String> VALID_ADDRESSES = Set.of("London", "New York", "Amsterdam");
 
     public User(String name, int age, String job, String address) {
-        if (name.isBlank()) {
-            throw new NullPointerException("name must not be empty");
-        }
+        this.name = checkNotBlank(name, "name must be not empty");
+        this.age = checkMajority(age, "age must not be < 18");
+        this.job = checkValidOption(job, VALID_JOBS,"Invalid job");
+        this.address = checkValidOption(address, VALID_ADDRESSES, "Invalid address");
+    }
 
-        if (age < 18) {
-            throw new IllegalArgumentException("Age must not be < 18");
+    private String checkNotBlank(String value, String message) {
+        if (value == null || value.isBlank()) {
+            throw new NullPointerException(message);
         }
+        return value;
+    }
 
-        if(!VALID_JOBS.contains(job)){
-         throw new IllegalArgumentException("Invalid job " + job);
+    private int checkMajority(int value, String message) {
+        if (value < 18) {
+            throw new IllegalArgumentException(message);
         }
+        return value;
+    }
 
-        if(!VALID_ADDRESSES.contains(address)){
-            throw new IllegalArgumentException("Invalid address " + address);
+    private String checkValidOption(String value, Set<String> validOptions, String message){
+        if (value == null || !validOptions.contains(value)){
+            throw new IllegalArgumentException(message + ": " + value);
         }
-
-        this.name = name;
-        this.age = age;
-        this.job = job;
-        this.address = address;
+        return value;
     }
 }
